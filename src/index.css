@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #0a0a0b;
+  color: #f5f5f4;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(212, 180, 131, 0.25);
+  color: #fafaf9;
+}
+
+/* Film grain overlay */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272e;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a44;
+}
+
+/* Reveal helpers */
+.reveal-line {
+  overflow: hidden;
+}
+.reveal-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Glass */
+.glass {
+  background: rgba(13, 13, 15, 0.55);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Hide horizontal overflow on horizontal scroll sections */
+.h-scroll-lock {
+  overflow: hidden;
+}
+
+@keyframes blurIn {
+  from { opacity: 0; filter: blur(14px); transform: translateY(24px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+.blur-in {
+  animation: blurIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Clip-path reveal — image wipes upward into view */
+@keyframes clipReveal {
+  from { clip-path: inset(100% 0 0 0); transform: scale(1.08); }
+  to { clip-path: inset(0 0 0 0); transform: scale(1); }
+}
+.clip-reveal {
+  animation: clipReveal 1.1s cubic-bezier(0.77, 0, 0.18, 1) both;
+}
+
+/* Soft lift entrance */
+@keyframes liftIn {
+  from { opacity: 0; transform: translateY(48px) scale(0.98); filter: brightness(0.6); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); }
+}
+.lift-in {
+  animation: liftIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Photo hover sheen sweep */
+@keyframes sheen {
+  0% { transform: translateX(-120%) skewX(-12deg); }
+  100% { transform: translateX(220%) skewX(-12deg); }
+}
+.sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transform: translateX(-120%) skewX(-12deg);
+  pointer-events: none;
+}
+.sheen:hover::after {
+  animation: sheen 900ms ease-out;
+}
+
+/* Smooth filter transitions for photos */
+.photo-img {
+  transition: transform 1200ms cubic-bezier(0.16,1,0.3,1),
+              filter 700ms ease,
+              opacity 700ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .grain::after { display: none; }
+}
